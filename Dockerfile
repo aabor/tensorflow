@@ -100,6 +100,7 @@ RUN pip install flask-mongo-sessions
 
 RUN pip install importlib-metadata itsdangerous jsonschema mccabe more-itertools nbconvert
 RUN pip install pymongo dask kaggle dataset openpyxl
+RUN pip install "dask[dataframe]" --upgrade
 RUN pip install pause humanfriendly pytest
 RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
 RUN pip install xlearn fuzzywuzzy
