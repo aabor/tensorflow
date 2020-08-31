@@ -38,7 +38,6 @@ pipeline {
                     docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
                         -d --name tensorflow \
                         -p 8888:8888 -p 6006:6006 \
-                        --network=db-connection \
                         --network=xvfb \
                         -e "DISPLAY=xvfb:99" \
                         -e "TZ=EEST" \
@@ -65,8 +64,7 @@ pipeline {
                         -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
                         -v /home/$USER/.logdir:/root/logs  \
                         --rm aabor/tensorflow:latest
-
-
+                    docker network connect db-connection tensorflow 
                 '''
             }
             post {
