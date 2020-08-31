@@ -59,7 +59,7 @@ pipeline {
                         -v "/home/$USER/.kaggle:/root/.kaggle" \
                         -v "/home/$USER/.ssh:/root/.ssh/" \
                         -v "/home/$USER/.secrets:/root/.secrets/" \
-                        -v "/home/$USER/.gitconfig:/home/jovyan/.gitconfig" \
+                        -v "/home/$USER/.gitconfig:/root/.gitconfig" \
                         -v /home/$USER/Documents:/tf/Documents \
                         -v /home/$USER/Downloads:/tf/Downloads \
                         -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
