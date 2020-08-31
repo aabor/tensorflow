@@ -33,7 +33,7 @@ pipeline {
                     docker push $USER/tensorflow:$GIT_VERSION
                     docker push $USER/tensorflow:latest
                 '''
-                labelledShell label: 'Starting docker containers...', script: '''
+                labelledShell label: 'Starting docker containers Xvfb and tensorflow', script: '''
                     docker run --name xvfb $USER/xvfb -d -rm -p 99:99 --network=xvfb
                     docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
                         -d --name tensorflow \
