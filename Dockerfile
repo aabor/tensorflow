@@ -99,8 +99,8 @@ RUN pip install Flask-Session
 RUN pip install flask-mongo-sessions
 
 RUN pip install importlib-metadata itsdangerous jsonschema mccabe more-itertools nbconvert
-RUN pip install pymongo kaggle dataset openpyxl
-RUN pause humanfriendly pytest
+RUN pip install pymongo dask kaggle dataset openpyxl
+RUN pip install pause humanfriendly pytest
 RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
 RUN pip install xlearn fuzzywuzzy
 
