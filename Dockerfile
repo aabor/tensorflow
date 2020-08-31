@@ -94,3 +94,14 @@ RUN pip install edward
 RUN pip install gym 
 RUN pip install gym[atari]
 
+RUN pip install Flask Flask-Bcrypt Flask-Cors Flask-JWT-Extended Flask-Login pytest-flask
+RUN pip install Flask-Session
+RUN pip install flask-mongo-sessions
+
+RUN pip install importlib-metadata itsdangerous jsonschema mccabe more-itertools nbconvert
+RUN pip install pymongo kaggle dataset openpyxl
+RUN pause humanfriendly pytest
+RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
+RUN pip install xlearn fuzzywuzzy
+
+RUN pip freeze
