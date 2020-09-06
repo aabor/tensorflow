@@ -105,4 +105,9 @@ RUN pip install pause humanfriendly pytest
 RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
 RUN pip install xlearn fuzzywuzzy
 
+RUN pip install plotly==4.9.0
+RUN pip install "notebook>=5.3" "ipywidgets>=7.2"
+RUN pip install -U kaleido
+
+
 RUN pip freeze
