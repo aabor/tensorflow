@@ -17,7 +17,9 @@ pipeline {
                     docker build -t $USER/tensorflow:latest .
                     docker tag $USER/xvfb:latest $USER/xvfb:$GIT_VERSION
                     docker tag $USER/tensorflow:latest $USER/tensorflow:$GIT_VERSION
-                    docker stop tensorflow
+                '''
+                labelledShell label: 'Stopping exitsting containers...', script: '''
+                    docker stop tensorflow || true && docker rm tensorflow || true
                     docker system prune -f # remove orphan containers, volumes, networks and images
                     # recreate networks after system pruning
                     docker network create xvfb || true
