@@ -31,4 +31,5 @@ docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
                         -v "/home/$USER/.logdir:/root/logs"  \
                         --rm aabor/tensorflow:latest
 docker network connect db-connection tensorflow 
-docker ps
+docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
+#docker stop $(docker ps -a -q);  docker rm $(docker ps -a -q)
