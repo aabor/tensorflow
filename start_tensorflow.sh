@@ -29,5 +29,6 @@ docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
                         -v "/home/$USER/Downloads:/tf/Downloads" \
                         -v "/home/$USER/tensorflow_datasets:/root/tensorflow_datasets" \
                         -v "/home/$USER/.logdir:/root/logs"  \
-                        --rm aabor/tensorflow-gpu:latest
+                        --rm aabor/tensorflow:latest
 docker network connect db-connection tensorflow 
+docker ps
