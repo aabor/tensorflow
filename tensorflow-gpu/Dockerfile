@@ -63,14 +63,7 @@ RUN pip install jupyter_nbextensions_configurator
 #!jupyter nbextension en 5xable ...
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
 
-RUN pip install tensorflow_datasets tensorflow_hub
-RUN pip install  mysql-connector-python pymongo Flask-Session flask-mongo-sessions
-RUN pip install pytest pytest-flask testpath mime dataset openpyxl
-RUN pip install mpmath sympy
-RUN pip install seaborn scikit-learn scikit-image xlearn
-RUN pip install numba
-RUN pip install kaggle pause humanfriendly
-RUN pip install gensim 
+RUN pip install "dask[dataframe]" --upgrade
 RUN cat /usr/local/cuda/version.txt
 RUN pip install cupy-cuda101
 RUN pip install -U spacy[cuda101]
@@ -78,24 +71,33 @@ RUN python -m spacy download en_core_web_sm
 RUN pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 \
   -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install transformers
-RUN pip install nltk
-RUN pip install edward
 RUN pip install gym 
 RUN pip install gym[atari]
+RUN pip install edward
+
+
+RUN pip install tensorflow_datasets tensorflow_hub kaggle 
+RUN pip install mysql-connector-python pymongo Flask-Session flask-mongo-sessions
+RUN pip install pytest pytest-flask testpath mime dataset openpyxl xlsxwriter tabulate
+RUN pip install mpmath sympy
+RUN pip install seaborn scikit-learn scikit-image xlearn
+RUN pip install numba
+RUN pip install pause humanfriendly
+RUN pip install gensim 
+RUN pip install nltk
 
 RUN pip install Flask Flask-Bcrypt Flask-Cors Flask-JWT-Extended Flask-Login pytest-flask
 RUN pip install Flask-Session
 RUN pip install flask-mongo-sessions
 
 RUN pip install importlib-metadata itsdangerous jsonschema mccabe more-itertools nbconvert
-RUN pip install pymongo arctic dask kaggle dataset openpyxl
-RUN pip install "dask[dataframe]" --upgrade
+RUN pip install pymongo arctic dask 
 RUN pip install pause humanfriendly pytest
 RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
 RUN pip install xlearn fuzzywuzzy
 
 RUN pip install plotly==4.9.0
-RUN pip install "notebook>=5.3" "ipywidgets>=7.2"
+RUN pip install notebook>=5.3 ipywidgets>=7.2
 RUN pip install -U kaleido
 RUN pip install dash==1.15.0
 
