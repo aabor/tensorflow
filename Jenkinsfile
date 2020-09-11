@@ -14,8 +14,10 @@ pipeline {
                 labelledShell label: 'Building and tagging docker images...', script: '''
                     export GIT_VERSION=$(git describe --tags | sed s/v//)
                     docker build -t $USER/xvfb:latest xvfb/.
-                    docker build -t $USER/tensorflow:latest .
+                    docker build -t $USER/tensorflow-gpu:latest tensorflow-gpu/.
+                    docker build -t $USER/tensorflow:latest tensorflow/.
                     docker tag $USER/xvfb:latest $USER/xvfb:$GIT_VERSION
+                    docker tag $USER/tensorflow-gpu:latest $USER/tensorflow-gpu:$GIT_VERSION
                     docker tag $USER/tensorflow:latest $USER/tensorflow:$GIT_VERSION
                 '''
                 labelledShell label: 'Stopping exitsting containers...', script: '''
@@ -33,6 +35,8 @@ pipeline {
                     echo "Pushing tensorflow:$GIT_VERSION to docker hub"
                     docker push $USER/xvfb:$GIT_VERSION
                     docker push $USER/xvfb:latest
+                    docker push $USER/tensorflow-gpu:$GIT_VERSION
+                    docker push $USER/tensorflow-gpu:latest
                     docker push $USER/tensorflow:$GIT_VERSION
                     docker push $USER/tensorflow:latest
                 '''
@@ -66,7 +70,7 @@ pipeline {
                         -v /home/$USER/Downloads:/tf/Downloads \
                         -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
                         -v /home/$USER/.logdir:/root/logs  \
-                        --rm aabor/tensorflow:latest
+                        --rm aabor/tensorflow-gpu:latest
                     docker network connect db-connection tensorflow 
                 '''
             }

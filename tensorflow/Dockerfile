@@ -1,6 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM tensorflow/tensorflow:2.3.0-gpu-jupyter
+FROM tensorflow/tensorflow:2.3.0-jupyter
 
 LABEL maintainer="A. A. Borochkin"
 
@@ -47,18 +47,7 @@ RUN apt-get update && apt-get install -y \
  cmake ffmpeg \
  && apt-get clean
 
-RUN apt-get update
-RUN mkdir /tf/tmp
-RUN wget -c https://www.imagemagick.org/download/ImageMagick.tar.gz -O - | tar -xz
-RUN mv ImageMagick* /tf/tmp/ImageMagick
-WORKDIR /tf/tmp/ImageMagick
-RUN ./configure
-RUN make
-RUN make install
-RUN ldconfig /usr/local/lib
-RUN magick --version
-WORKDIR /tf
-RUN rm -R tmp
+RUN apt-get update && apt-get install -y imagemagick && convert --version
 
 RUN apt-get update && apt-get install -y \
   python-opengl \
@@ -82,17 +71,9 @@ RUN pip install seaborn scikit-learn scikit-image xlearn
 RUN pip install numba
 RUN pip install kaggle pause humanfriendly
 RUN pip install gensim 
-RUN cat /usr/local/cuda/version.txt
-RUN pip install cupy-cuda101
-RUN pip install -U spacy[cuda101]
+RUN pip install -U spacy
 RUN python -m spacy download en_core_web_sm
-RUN pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 \
-  -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install transformers
 RUN pip install nltk
-RUN pip install edward
-RUN pip install gym 
-RUN pip install gym[atari]
 
 RUN pip install Flask Flask-Bcrypt Flask-Cors Flask-JWT-Extended Flask-Login pytest-flask
 RUN pip install Flask-Session
