@@ -1,6 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM tensorflow/tensorflow:2.3.0rc2-gpu-jupyter
+FROM tensorflow/tensorflow:2.3.0-gpu-jupyter
 
 LABEL maintainer="A. A. Borochkin"
 
