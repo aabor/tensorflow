@@ -65,11 +65,11 @@ RUN pip install jupyter_nbextensions_configurator
 
 RUN pip install tensorflow_datasets tensorflow_hub kaggle 
 RUN pip install mysql-connector-python pymongo Flask-Session flask-mongo-sessions
-RUN pip install pytest pytest-flask testpath mime dataset openpyxl xlsxwriter tabulate
+RUN pip install pytest testpath mime pause humanfriendly dataset tabulate
+RUN pip install openpyxl xlsxwriter tqdm
 RUN pip install mpmath sympy
 RUN pip install seaborn scikit-learn scikit-image xlearn
 RUN pip install numba
-RUN pip install pause humanfriendly
 RUN pip install gensim 
 RUN pip install nltk
 
