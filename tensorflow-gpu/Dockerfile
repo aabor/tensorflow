@@ -103,6 +103,7 @@ RUN pip install dash==1.15.0
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension
+RUN pip install jupyterthemes
 
 RUN pip freeze
 
