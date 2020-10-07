@@ -29,8 +29,8 @@ pipeline {
                 '''
                 labelledShell label: 'Pushing images to docker registry...', script: '''
                     echo 'login to docker'
-                    #docker login -u $DOCKER_CREDS_USR  -p $DOCKER_CREDS_PSW
-                    docker login
+                    docker login -u $DOCKER_CREDS_USR  -p $DOCKER_CREDS_PSW
+                    #docker login
                     export GIT_VERSION=$(git describe --tags | sed s/v//)
                     echo $GIT_VERSION
                     echo "Pushing tensorflow:$GIT_VERSION to docker hub"
