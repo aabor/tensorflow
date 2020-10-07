@@ -13,6 +13,7 @@ mkdir -p "/home/$USER/.logdir"
 echo "directories created"
 docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
                         -d --name tensorflow \
+                        -u $(id -u):$(id -g) \
                         -p 8888:8888 -p 6006:6006 -p 8050:8050\
                         --network=xvfb \
                         -e "DISPLAY=xvfb:99" \
