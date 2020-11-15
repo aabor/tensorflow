@@ -12,7 +12,7 @@ pipeline {
             }            
             steps {
                 labelledShell label: 'Building and tagging docker images...', script: '''
-                    export GIT_VERSION=$(git describe --tags | sed s/v//)
+                    export GIT_VERSION=$(git describe --tags | sed s/v// | sed s/[^-]*$// | sed s/-$//)
                     docker build -t $USER/xvfb:latest xvfb/.
                     docker build -t $USER/tensorflow-gpu:latest tensorflow-gpu/.
                     docker build -t $USER/tensorflow:latest tensorflow/.
@@ -28,7 +28,7 @@ pipeline {
                     echo 'login to docker'
                     docker login -u $DOCKER_CREDS_USR  -p $DOCKER_CREDS_PSW
                     #docker login
-                    export GIT_VERSION=$(git describe --tags | sed s/v//)
+                    export GIT_VERSION=$(git describe --tags | sed s/v// | sed s/[^-]*$// | sed s/-$//)
                     echo $GIT_VERSION
                     echo "Pushing tensorflow:$GIT_VERSION to docker hub"
                     docker push $USER/xvfb:$GIT_VERSION

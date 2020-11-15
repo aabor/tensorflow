@@ -1,6 +1,15 @@
+# docker swarm leave --force
+# docker pull aabor/xvfb:2.0-4-gd6264a5
+# docker pull aabor/tensorflow-gpu:2.0-4-gd6264a5
+# docker pull aabor/tensorflow:2.0-4-gd6264a5
+# docker pull aabor/mongo:latest
+# docker pull aabor/rstudio:2.1-10-g4718c52
+# docker pull aabor/rstudio-finance:2.1-10-g4718c52
+# docker pull aabor/rstudio-text:2.1-10-g4718c52
 # recreate networks after system pruning
 docker network create xvfb || true
-docker network create db-connection || true
+docker network create -d overlay --attachable db-connection || true
+docker network create -d overlay --attachable selenium-hub || true
 echo "networks created"
 mkdir -p "/home/$USER/.jupyter"
 mkdir -p "/home/$USER/.keras"
@@ -8,16 +17,21 @@ mkdir -p "/home/$USER/.cache:"
 mkdir -p "/home/$USER/.local/share/jupyter/nbextensions"
 mkdir -p "/home/$USER/.ssh"
 mkdir -p "/home/$USER/.secrets"
-mkdir -p "/home/$USER/Downloads"
 mkdir -p "/home/$USER/tensorflow_datasets"
 mkdir -p "/home/$USER/.logdir"
 echo "directories created"
 #-u $(id -u):$(id -g) \
 docker run -d \
     --name xvfb \
-    -p 99:99 --network=xvfb \
-    -rm $USER/xvfb 
-docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
+    -p 99:99 \
+    --network=xvfb \
+    --rm $USER/xvfb
+# --secret source=MONGODB_PASSWORD,target=mongo_common_pwd,mode=0400 \
+# --secret source=MONGODB_PASSWORD,target=mongo_fhq_pwd,mode=0400 \
+# --secret source=FLASK_SECRET_KEY,target=flask_secret_key,mode=0400 \
+docker run --rm \
+    --gpus all --shm-size=1g \
+    --ulimit memlock=-1 \
     -d --name tensorflow \
     -p 8888:8888 -p 6006:6006 -p 8050:8050\
     --network=xvfb \
@@ -26,9 +40,7 @@ docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
     -e "WERKZEUG_DEBUG_PIN='off'" \
     -e "MONGODB_DATABASE=flaskdb" \
     -e "MONGODB_USERNAME=$USER" \
-    -e "MONGODB_PASSWORD=$MONGO_COMMON_CREDS_PSW" \
-    -e "MONGODB_FH_PASSWORD=$MONGO_FHQ_PSW" \
-    -e "FLASK_SECRET_KEY=$FLASK_SECRET_KEY" \
+    -e MONGODB_PASSWORD=$(pass docker/mongo_common_psw) \
     -e "MONGODB_HOSTNAME=mongo" \
     -v "/etc/X11/xorg.conf:/etc/X11/xorg.conf" \
     -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
@@ -45,8 +57,7 @@ docker run --gpus all --shm-size=1g --ulimit memlock=-1 \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
     -v /home/$USER/.logdir:/root/logs  \
-    --rm aabor/tensorflow-gpu:latest
-docker network connect db-connection tensorflow 
+    aabor/tensorflow-gpu:2.0-4-gd6264a5
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
