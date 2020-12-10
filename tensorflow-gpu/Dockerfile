@@ -62,6 +62,7 @@ RUN pip install jupyter_nbextensions_configurator
 # in notebook with mounted external folder .jupyter:/root/.jupyter
 #!jupyter nbextension en 5xable ...
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
+RUN pip install yapf
 
 RUN pip install "dask[dataframe]" --upgrade
 RUN cat /usr/local/cuda/version.txt

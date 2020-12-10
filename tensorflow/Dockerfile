@@ -33,6 +33,14 @@ RUN apt-get update && apt-get install -y \
   libsm6 libxext6 libxrender-dev \
   libjpeg-dev libpng-dev \
   libtiff5-dev \
+  libpoppler-cpp-dev \
+  && apt-get clean
+
+# install LaTeX support for python
+RUN apt-get update && DEBIAN_FRONTEND='noninteractive' apt-get install -y \
+  ghostscript \
+  texlive-latex-extra \
+  dvipng \
   && apt-get clean
 
 RUN pip install opencv-python
@@ -62,6 +70,7 @@ RUN pip install jupyter_nbextensions_configurator
 # in notebook with mounted external folder .jupyter:/root/.jupyter
 #!jupyter nbextension en 5xable ...
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
+RUN pip install yapf
 
 RUN pip install tensorflow_datasets tensorflow_hub kaggle 
 RUN pip install mysql-connector-python pymongo Flask-Session flask-mongo-sessions
@@ -91,6 +100,8 @@ RUN pip install dash==1.15.0
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension
 RUN pip install jupyterthemes
+#RUN pip install --upgrade Pillow
+RUN apt-get install -y python3-matplotlib
 
 RUN pip freeze
 
