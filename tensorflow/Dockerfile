@@ -33,15 +33,21 @@ RUN apt-get update && apt-get install -y \
   libsm6 libxext6 libxrender-dev \
   libjpeg-dev libpng-dev \
   libtiff5-dev \
-  libpoppler-cpp-dev \
   && apt-get clean
 
 # install LaTeX support for python
-RUN apt-get update && DEBIAN_FRONTEND='noninteractive' apt-get install -y \
+RUN apt-get update && apt-get install -y \
+  libpoppler-cpp-dev \
+  && apt-get clean
+RUN apt-get update && apt-get install -y \
   ghostscript \
-  texlive-latex-extra \
   dvipng \
   && apt-get clean
+
+RUN apt-get update && DEBIAN_FRONTEND='noninteractive' apt-get install -y \
+  texlive-latex-extra \
+  && apt-get clean
+
 
 RUN pip install opencv-python
 
