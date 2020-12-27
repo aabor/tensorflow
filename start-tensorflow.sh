@@ -38,9 +38,12 @@ docker run --rm \
     -e "DISPLAY=xvfb:99" \
     -e "TZ=EEST" \
     -e "WERKZEUG_DEBUG_PIN='off'" \
+    -e PYTHONPATH=/tf/projects/fhq \
     -e "MONGODB_DATABASE=flaskdb" \
     -e "MONGODB_USERNAME=$USER" \
     -e MONGODB_PASSWORD=$(pass docker/mongo_common_psw) \
+    -e MONGODB_FH_PASSWORD=$(pass docker/mongo_fhq_psw) \
+    -e FLASK_SECRET_KEY=$(pass docker/flask_secret_key) \
     -e "MONGODB_HOSTNAME=mongo" \
     -v "/etc/X11/xorg.conf:/etc/X11/xorg.conf" \
     -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
