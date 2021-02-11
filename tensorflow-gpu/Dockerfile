@@ -101,6 +101,10 @@ RUN pip install plotly==4.9.0
 RUN pip install notebook>=5.3 ipywidgets>=7.2
 RUN pip install -U kaleido
 RUN pip install dash==1.15.0
+RUN pip install toolz
+
+RUN pip install yfinance bitmex-ws
+RUN pip install --upgrade mplfinance
 
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension

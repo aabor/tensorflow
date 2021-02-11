@@ -26,9 +26,7 @@ docker run -d \
     -p 99:99 \
     --network=xvfb \
     --rm $USER/xvfb
-# --secret source=MONGODB_PASSWORD,target=mongo_common_pwd,mode=0400 \
-# --secret source=MONGODB_PASSWORD,target=mongo_fhq_pwd,mode=0400 \
-# --secret source=FLASK_SECRET_KEY,target=flask_secret_key,mode=0400 \
+docker stop $(docker container ls -f name=tensorflow -aq)
 docker run --rm \
     --gpus all --shm-size=1g \
     --ulimit memlock=-1 \
@@ -44,6 +42,11 @@ docker run --rm \
     -e MONGODB_PASSWORD=$(pass docker/mongo_common_psw) \
     -e MONGODB_FH_PASSWORD=$(pass docker/mongo_fhq_psw) \
     -e FLASK_SECRET_KEY=$(pass docker/flask_secret_key) \
+    -e MYSQL_ROOT_PASSWORD=$(pass docker/mysql_root_psw) \
+    -e MYSQL_PASSWORD="$(pass docker/mysql_user_psw)" \
+    -e MYSQL_USER="$USER" \
+    -e MYSQL_DATABASE="edu" \
+    -e MYSQL_ROOT_HOST="172.*.*.*" \
     -e "MONGODB_HOSTNAME=mongo" \
     -v "/etc/X11/xorg.conf:/etc/X11/xorg.conf" \
     -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
@@ -60,7 +63,7 @@ docker run --rm \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
     -v /home/$USER/.logdir:/root/logs  \
-    aabor/tensorflow-gpu:2.0-4-gd6264a5
+    aabor/tensorflow-gpu:3.2
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
