@@ -63,7 +63,7 @@ docker run --rm \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
     -v /home/$USER/.logdir:/root/logs  \
-    aabor/tensorflow-gpu:3.2
+    aabor/tensorflow-gpu:3.4
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"

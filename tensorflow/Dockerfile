@@ -1,6 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM tensorflow/tensorflow:2.3.0-jupyter
+FROM tensorflow/tensorflow:2.4.1-jupyter
 
 LABEL maintainer="A. A. Borochkin"
 
@@ -78,6 +78,7 @@ RUN pip install jupyter_nbextensions_configurator
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
 RUN pip install yapf
 
+RUN pip install dataclasses pyzipper pyPDF4
 RUN pip install tensorflow_datasets tensorflow_hub kaggle 
 RUN pip install mysql-connector-python pymongo Flask-Session flask-mongo-sessions
 RUN pip install pytest testpath mime pause humanfriendly dataset tabulate
@@ -109,6 +110,12 @@ RUN jupyter nbextension enable --py widgetsnbextension
 RUN pip install jupyterthemes
 #RUN pip install --upgrade Pillow
 RUN apt-get install -y python3-matplotlib
+
+RUN apt install -y xfonts-base xfonts-75dpi
+RUN curl "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb" -L -o "wkhtmltopdf.deb"
+RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
+
+RUN pip install pdfkit
 
 RUN pip freeze
 

@@ -1,6 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM tensorflow/tensorflow:2.3.0-gpu-jupyter
+FROM tensorflow/tensorflow:2.4.1-gpu-jupyter
 
 LABEL maintainer="A. A. Borochkin"
 
@@ -64,8 +64,9 @@ RUN pip install jupyter_nbextensions_configurator
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
 RUN pip install yapf
 
+RUN pip install dataclasses pyzipper pyPDF4
 RUN pip install "dask[dataframe]" --upgrade
-RUN cat /usr/local/cuda/version.txt
+#RUN cat /usr/local/cuda/version.txt
 RUN pip install cupy-cuda101
 RUN pip install -U spacy[cuda101]
 RUN python -m spacy download en_core_web_sm
@@ -109,6 +110,12 @@ RUN pip install --upgrade mplfinance
 RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension
 RUN pip install jupyterthemes
+
+RUN apt-get update && apt-get install -y xfonts-base xfonts-75dpi
+RUN curl "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb" -L -o "wkhtmltopdf.deb"
+RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
+
+RUN pip install pdfkit
 
 RUN pip freeze
 
