@@ -118,6 +118,11 @@ RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
 RUN pip install pdfkit htmlgen ll-xist htmlgenerator
 
 RUN pip install wordcloud
+RUN python3 -m nltk.downloader stopwords
+RUN pip uninstall jedi --yes
+RUN pip install colour
+RUN pip install beautifulsoup4
+RUN pip install open3d Shapely
 
 RUN pip freeze
 

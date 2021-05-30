@@ -52,6 +52,7 @@ docker run --rm \
     -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
     -v "/home/$USER/projects:/tf/projects" \
     -v "/home/$USER/.jupyter:/root/.jupyter" \
+    -v "/home/$USER/.ipython:/root/.ipython" \
     -v "/home/$USER/.keras:/root/.keras" \
     -v "/home/$USER/.cache:/root/.cache" \
     -v "/home/$USER/.local/share/jupyter/nbextensions:/root/.local/share/jupyter/nbextensions" \
@@ -63,7 +64,7 @@ docker run --rm \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
     -v /home/$USER/.logdir:/root/logs  \
-    aabor/tensorflow-gpu:3.4
+    aabor/tensorflow-gpu:3.4.1
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"

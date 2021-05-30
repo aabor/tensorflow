@@ -63,6 +63,7 @@ RUN pip install jupyter_nbextensions_configurator
 #!jupyter nbextension en 5xable ...
 # in jupyter_nbextensions_configurator enable scrolldown autoscroll
 RUN pip install yapf
+RUN pip uninstall jedi --yes
 
 RUN pip install dataclasses pyzipper pyPDF4
 RUN pip install "dask[dataframe]" --upgrade
@@ -116,6 +117,7 @@ RUN curl "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wk
 RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
 
 RUN pip install pdfkit
+RUN pip install open3d Shapely
 
 RUN pip freeze
 
