@@ -119,5 +119,12 @@ RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
 RUN pip install pdfkit
 RUN pip install open3d Shapely
 
+RUN apt-get update && apt-get install -y \
+  graphviz libgraphviz-dev pkg-config \
+  && apt-get clean
+
+RUN pip install graphviz pygraphviz
+
+
 RUN pip freeze
 

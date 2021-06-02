@@ -124,5 +124,11 @@ RUN pip install colour
 RUN pip install beautifulsoup4
 RUN pip install open3d Shapely
 
-RUN pip freeze
+RUN apt-get update && apt-get install -y \
+  graphviz libgraphviz-dev pkg-config \
+  && apt-get clean
 
+RUN pip install graphviz pygraphviz
+
+
+RUN pip freeze
