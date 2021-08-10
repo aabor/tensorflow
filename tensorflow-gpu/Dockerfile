@@ -1,8 +1,9 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM tensorflow/tensorflow:2.4.1-gpu-jupyter
-
-LABEL maintainer="A. A. Borochkin"
+# Find Dockerfiles:
+# https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles
+FROM tensorflow/tensorflow:2.6.0rc1-gpu-jupyter
+# FROM nvcr.io/nvidia/cudagl:11.3.1-devel-ubuntu18.04
 
 # installation utilities
 RUN  apt-get update && apt-get install -y \
@@ -25,33 +26,42 @@ RUN apt-get update && apt-get install -y \
   gcc \
   binutils \
   cmake \
+  ffmpeg \
   && apt-get clean
 
-RUN pip install -U setuptools pip
+# xvfb
+RUN apt-get update && apt-get -y install libgl1 freeglut3-dev xvfb
 
 RUN apt-get update && apt-get install -y \
   libsm6 libxext6 libxrender-dev \
   libjpeg-dev libpng-dev \
   libtiff5-dev \
   && apt-get clean
-
-RUN pip install opencv-python
-
 RUN apt-get update && apt-get install -y \
- graphviz \
- && apt-get clean
+  imagemagick && convert --version
 
-RUN pip install pydot
-
+# PyQt5
+RUN pip install PyQt5
 RUN apt-get update && apt-get install -y \
- cmake ffmpeg \
- && apt-get clean
-
-RUN apt-get update && apt-get install -y imagemagick && convert --version
-
-RUN apt-get update && apt-get install -y \
-  python-opengl \
+  python3-pyqt5 \
+  pyqt5-dev-tools \
+  qttools5-dev-tools \
+  x11-utils \
+  mesa-utils \
+  xvfb \
   && apt-get clean
+
+RUN echo $CUDA_VERSION
+# cuda-11.2
+# https://www.tensorflow.org/install/source
+RUN pip install tensorflow
+RUN pip install tensorflow_datasets tensorflow_hub kaggle 
+
+RUN pip install "dask[dataframe]" --upgrade
+
+RUN pip install mpmath sympy numba
+
+RUN pip install cupy-cuda112
 
 # install Jupyter notebooks extentions
 # https://github.com/ipython-contrib/jupyter_contrib_nbextensions
@@ -65,29 +75,18 @@ RUN pip install jupyter_nbextensions_configurator
 RUN pip install yapf
 RUN pip uninstall jedi --yes
 
-RUN pip install dataclasses pyzipper pyPDF4
-RUN pip install "dask[dataframe]" --upgrade
-#RUN cat /usr/local/cuda/version.txt
-RUN pip install cupy-cuda101
-RUN pip install -U spacy[cuda101]
-RUN python -m spacy download en_core_web_sm
-RUN pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 \
-  -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install transformers
-RUN pip install gym 
-RUN pip install gym[atari]
-RUN pip install edward
+RUN pip install dataclasses pyzipper
+# RUN pip install -U spacy[cuda112]
+# RUN python -m spacy download en_core_web_sm
+# RUN pip install transformers
+# RUN pip install gym 
+# RUN pip install gym[atari]
+# RUN pip install edward
 
 
-RUN pip install tensorflow_datasets tensorflow_hub kaggle 
 RUN pip install mysql-connector-python pymongo Flask-Session flask-mongo-sessions
 RUN pip install pytest testpath mime pause humanfriendly dataset tabulate
 RUN pip install openpyxl xlsxwriter tqdm
-RUN pip install mpmath sympy
-RUN pip install seaborn scikit-learn scikit-image xlearn
-RUN pip install numba
-RUN pip install gensim 
-RUN pip install nltk
 
 RUN pip install Flask Flask-Bcrypt Flask-Cors Flask-JWT-Extended Flask-Login pytest-flask
 RUN pip install Flask-Session
@@ -97,34 +96,15 @@ RUN pip install importlib-metadata itsdangerous jsonschema mccabe more-itertools
 RUN pip install pymongo arctic dask 
 RUN pip install pause humanfriendly pytest
 RUN pip install python-dateutil pyzmq qtconsole six testpath text-unidecode mime 
-RUN pip install xlearn fuzzywuzzy
 
-RUN pip install plotly==4.9.0
 RUN pip install notebook>=5.3 ipywidgets>=7.2
 RUN pip install -U kaleido
 RUN pip install dash==1.15.0
 RUN pip install toolz
+RUN pip install opencv-python
 
-RUN pip install yfinance bitmex-ws
-RUN pip install --upgrade mplfinance
-
-RUN pip install ipywidgets
 RUN jupyter nbextension enable --py widgetsnbextension
 RUN pip install jupyterthemes
-
-RUN apt-get update && apt-get install -y xfonts-base xfonts-75dpi
-RUN curl "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.bionic_amd64.deb" -L -o "wkhtmltopdf.deb"
-RUN dpkg -i wkhtmltopdf.deb && rm wkhtmltopdf.deb
-
-RUN pip install pdfkit
-RUN pip install open3d Shapely
-
-RUN apt-get update && apt-get install -y \
-  graphviz libgraphviz-dev pkg-config \
-  && apt-get clean
-
-RUN pip install graphviz pygraphviz
-
 
 RUN pip freeze
 

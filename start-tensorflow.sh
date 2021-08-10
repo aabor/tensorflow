@@ -21,11 +21,13 @@ mkdir -p "/home/$USER/tensorflow_datasets"
 mkdir -p "/home/$USER/.logdir"
 echo "directories created"
 #-u $(id -u):$(id -g) \
+# https://hub.docker.com/r/metal3d/xvfb
 docker run -d \
     --name xvfb \
     -p 99:99 \
     --network=xvfb \
-    --rm $USER/xvfb
+    metal3d/xvfb:0.0.1
+
 docker stop $(docker container ls -f name=tensorflow -aq)
 docker run --rm \
     --gpus all --shm-size=1g \
@@ -54,6 +56,7 @@ docker run --rm \
     -v "/home/$USER/.jupyter:/root/.jupyter" \
     -v "/home/$USER/.ipython:/root/.ipython" \
     -v "/home/$USER/.keras:/root/.keras" \
+    -v "/home/$USER/.fh:/root/.fh" \
     -v "/home/$USER/.cache:/root/.cache" \
     -v "/home/$USER/.local/share/jupyter/nbextensions:/root/.local/share/jupyter/nbextensions" \
     -v "/home/$USER/.kaggle:/root/.kaggle" \
@@ -63,8 +66,8 @@ docker run --rm \
     -v /home/$USER/Documents:/tf/Documents \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
-    -v /home/$USER/.logdir:/root/logs  \
-    aabor/tensorflow-gpu:3.4.6
+    -v /home/$USER/.logdir:/root/logs \
+    aabor/tensorflow-gpu:4.0.4
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"

@@ -131,4 +131,22 @@ RUN apt-get update && apt-get install -y \
 RUN pip install graphviz pygraphviz
 
 
+
+# HTML to PDF convertor based on Node.js
+RUN apt-get update && apt-get install -y \
+    build-essential chrpath libssl-dev libxft-dev \
+    && apt-get clean
+RUN apt-get install -y \
+    libfreetype6 libfreetype6-dev libfontconfig1 libfontconfig1-dev \
+    && apt-get clean
+RUN wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+RUN tar xvjf phantomjs-2.1.1-linux-x86_64.tar.bz2 -C /usr/local/share/
+RUN rm phantomjs-2.1.1-linux-x86_64.tar.bz2
+RUN ln -sf /usr/local/share/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin
+RUN phantomjs --version
+RUN apt-get update && apt-get install -y \
+  npm \
+  && apt-get clean
+RUN npm install system html-pdf
+
 RUN pip freeze
