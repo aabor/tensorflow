@@ -56,7 +56,6 @@ docker run --rm \
     -v "/home/$USER/.jupyter:/root/.jupyter" \
     -v "/home/$USER/.ipython:/root/.ipython" \
     -v "/home/$USER/.keras:/root/.keras" \
-    -v "/home/$USER/.fh:/root/.fh" \
     -v "/home/$USER/.cache:/root/.cache" \
     -v "/home/$USER/.local/share/jupyter/nbextensions:/root/.local/share/jupyter/nbextensions" \
     -v "/home/$USER/.kaggle:/root/.kaggle" \
@@ -67,7 +66,7 @@ docker run --rm \
     -v /home/$USER/Downloads:/tf/Downloads \
     -v /home/$USER/tensorflow_datasets:/root/tensorflow_datasets \
     -v /home/$USER/.logdir:/root/logs \
-    aabor/tensorflow-gpu:4.0.4
+    aabor/tensorflow-gpu:4.1.0
 
 docker network connect db-connection tensorflow 
 docker ps --filter "name=tensorflow" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"

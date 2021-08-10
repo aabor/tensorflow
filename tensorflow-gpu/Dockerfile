@@ -101,7 +101,8 @@ RUN pip install notebook>=5.3 ipywidgets>=7.2
 RUN pip install -U kaleido
 RUN pip install dash==1.15.0
 RUN pip install toolz
-RUN pip install opencv-python
+
+RUN pip install --upgrade mplfinance==0.12.7a17
 
 RUN jupyter nbextension enable --py widgetsnbextension
 RUN pip install jupyterthemes
