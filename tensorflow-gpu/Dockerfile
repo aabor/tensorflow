@@ -2,7 +2,13 @@
 # configured for automatic build
 # Find Dockerfiles:
 # https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/dockerfiles
-FROM tensorflow/tensorflow:2.6.0rc1-gpu-jupyter
+# Inspect Dockerfile digest at the docker hub repository
+# to find CUDA version in the image
+#
+# To find CUDA version at the host run in the host console:
+# nvidia-smi 
+#
+FROM tensorflow/tensorflow:2.5.1-gpu-jupyter
 # FROM nvcr.io/nvidia/cudagl:11.3.1-devel-ubuntu18.04
 
 # installation utilities
