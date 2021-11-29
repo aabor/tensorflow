@@ -29,6 +29,7 @@ docker run --rm \
     --ulimit memlock=-1 \
     -d --name pytorch \
     -p 8889:8888 -p 6006:6006 -p 8050:8050\
+    --gpu=all \
     --network=xvfb \
     -e "DISPLAY=xvfb:99" \
     -e "TZ=EEST" \
