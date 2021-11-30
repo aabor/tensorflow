@@ -45,8 +45,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ghostscript=9.50~dfsg-5ubuntu4.4 \
     && apt-get clean
 
-RUN apt list -a qpdf
-RUN apt list -a ghostscript
+# RUN apt list -a qpdf
+# RUN apt list -a ghostscript
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
