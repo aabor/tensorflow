@@ -24,16 +24,18 @@ docker run -d \
     --network=xvfb \
     metal3d/xvfb:0.0.1
 
+# -e "JUPYTER_ENABLE_LAB=yes" starts JupyterLab instead of jupyter notebook that
+# listens to the same port
 docker stop $(docker container ls -f name=pytorch -aq)
 docker run --rm \
     --ulimit memlock=-1 \
     -d --name pytorch \
-    -p 8889:8888 -p 6006:6006 -p 8050:8050\
-    --gpu=all \
+    -p 8888:8888 -p 6006:6006 -p 8050:8050\
     --network=xvfb \
     -e "DISPLAY=xvfb:99" \
     -e "TZ=EEST" \
     -e "WERKZEUG_DEBUG_PIN='off'" \
+    -e "JUPYTER_ENABLE_LAB=yes" \
     -v "/etc/X11/xorg.conf:/etc/X11/xorg.conf" \
     -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
     -v "/home/$USER/projects:/home/jovyan/work" \
@@ -49,11 +51,12 @@ docker run --rm \
     -v "/home/$USER/Downloads":"/home/jovyan/Downloads" \
     -v "/home/$USER/.logs":"/home/jovyan/.logs" \
     -v "/home/$USER/.gitconfig:/home/jovyan/.gitconfig" \
+    -v "/home/$USER/.netrc:/home/jovyan/.netrc" \
     -v "/home/$USER/projects/Reporter/data/mnt/logs/reporter_logs:/root/reporter/logs" \
     -v "/home/$USER/projects/Reporter/data/mnt/logs/controller_logs:/opt/controller_logs" \
     -v "/home/$USER/projects/Reporter/data/mnt/AdminTool/Private:/opt/Private" \
     -v "/home/$USER/projects/DeviceLanguage:/root/reporter/DeviceLanguage" \
-    aabor/pytorch:1.1.3
+    aabor/pytorch-gpu:1.0.0
 docker network connect db-connection pytorch
 docker ps --filter "name=pytorch" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
 #docker stop $(docker ps -a -q);  docker rm $(docker ps -a -q)

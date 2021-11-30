@@ -1,10 +1,14 @@
 # aabor/tensorflow
 # configured for automatic build
-# FROM jupyter/base-notebook:python-3.9.7
+FROM jupyter/base-notebook:python-3.9.7
 # docker pull pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
-FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
+# FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
 
 LABEL maintainer="A. A. Borochkin"
+
+# https://askubuntu.com/questions/909277/avoiding-user-interaction-with-tzdata-when-installing-certbot-in-a-docker-contai
+ENV TZ=UTC
+# ENV DEBIAN_FRONTEND=noninteractive
 
 # https://github.com/jupyter/docker-stacks/tree/master/base-notebook
 # https://hub.docker.com/r/jupyter/base-notebook
@@ -22,8 +26,9 @@ USER root
 
 # installation utilities
 RUN  apt-get update && apt-get install -y \
+  apt-utils \
   wget zip unzip cron nano vim tree \
-  gnupg2 \
+  curl gnupg2 \
   git \
   && apt-get clean
 
@@ -36,57 +41,96 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qpdf=9.1.1-1build1 \
+    qpdf \
     ghostscript \
-    && sudo apt-get clean
+    && apt-get clean
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
     libgraphviz-dev \
     pkg-config \
     && apt-get clean
 
+RUN apt list -a qpdf
+RUN apt list -a ghostscript
+
 # need for nbconvert
 RUN apt-get update && apt-get install -y \
   pandoc \
   texlive-xetex texlive-fonts-recommended texlive-plain-generic
 
+# Install Node.js and npm for JupyterLab extensions
+# Download and execute the NodeSource installation script
+RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
+# The nodejs package contains both the node and npm binaries
+RUN apt-get -y install nodejs
+
+
 # install pyton packages as normal user
 USER ${NB_UID}
 
-RUN pip install Cython 
-
 RUN pip install -U setuptools pip
 
-# install Jupyter notebooks extentions
-# https://github.com/ipython-contrib/jupyter_contrib_nbextensions
-RUN pip install jupyter_contrib_nbextensions 
-#RUN jupyter contrib nbextension install --user
-RUN pip install jupyter_nbextensions_configurator
-#RUN jupyter nbextensions_configurator enable --user
-# in notebook with mounted external folder .jupyter:/root/.jupyter
-#!jupyter nbextension en 5xable ...
-# in jupyter_nbextensions_configurator enable scrolldown autoscroll
-RUN pip install notebook>=5.3 ipywidgets>=7.2
-RUN pip install ipywidgets
-RUN jupyter nbextension enable --py widgetsnbextension
-RUN pip install jupyterthemes yapf
+RUN pip install Cython 
+
+RUN pip install --upgrade jupyterlab jupyterlab-git
+
+# JupyterLab extentions
+# https://github.com/jtpio/jupyterlab-system-monitor
+RUN pip install jupyterlab-system-monitor
+# https://github.com/chaoleili/jupyterlab_tensorboard
+
+# https://github.com/jupyter-lsp/jupyterlab-lsp
+# to use autocompletion disable Jedi:
+# temporary %config Completer.use_jedi = False
+# or permanently by setting c.Completer.use_jedi = False in your ipython_config.py file. 
+RUN pip install 'python-lsp-server[all]'
+
+# https://github.com/jupyterlab/jupyterlab-git
+
+# https://github.com/jupyterlab/jupyterlab-latex
+RUN pip install jupyterlab_latex
+
+# https://pypi.org/project/jupyterlab-theme-solarized-dark/
+# apply theme by checking Settings -> Jupyterlab Theme -> Jupyterlab Solarized Dark
+# enable theme scrollbars Settings -> Jupyterlab Theme -> Theme Scrollbars
+
+RUN jupyter labextension install \
+  jupyterlab-topbar-extension \
+  jupyterlab-theme-solarized-dark
+
+RUN jupyter labextension list
+
+# # install Jupyter notebooks extentions
+# # https://github.com/ipython-contrib/jupyter_contrib_nbextensions
+# RUN pip install jupyter_contrib_nbextensions 
+# #RUN jupyter contrib nbextension install --user
+# RUN pip install jupyter_nbextensions_configurator
+# #RUN jupyter nbextensions_configurator enable --user
+# # in notebook with mounted external folder .jupyter:/root/.jupyter
+# #!jupyter nbextension en 5xable ...
+# # in jupyter_nbextensions_configurator enable scrolldown autoscroll
+# RUN pip install notebook>=5.3 ipywidgets>=7.2
+# RUN pip install ipywidgets
+# RUN jupyter nbextension enable --py widgetsnbextension
+# RUN pip install jupyterthemes yapf
 
 RUN pip install numba
 
 RUN pip install theano
 
 RUN pip install omegaconf
-RUN pip3 install torch==1.9.1+cpu torchvision==0.10.1+cpu torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+
+# check official site to get correct installation command for pytorch
+# https://pytorch.org/get-started/locally/
+RUN pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
 # Hugging Face Transformers
 RUN pip install "transformers[sentencepiece]"
 
 # Nemo
 RUN pip install wget unidecode
 
-RUN pip install nemo_toolkit[all] && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-# see https://github.com/jupyter/docker-stacks/blob/master/base-notebook/fix-permissions
+RUN pip install nemo_toolkit[all]
 
 # data sources
 RUN pip install datasets kaggle
