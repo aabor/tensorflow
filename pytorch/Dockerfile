@@ -76,6 +76,9 @@ RUN pip install Cython
 RUN pip install --upgrade jupyterlab jupyterlab-git
 
 # JupyterLab extentions
+# https://ipywidgets.readthedocs.io/en/latest/user_install.html
+RUN pip install ipywidgets jupyterlab_widgets
+
 # https://github.com/jtpio/jupyterlab-system-monitor
 RUN pip install jupyterlab-system-monitor
 # https://github.com/chaoleili/jupyterlab_tensorboard
