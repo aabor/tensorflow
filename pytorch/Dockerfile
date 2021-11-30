@@ -41,18 +41,18 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    qpdf \
-    ghostscript \
+    qpdf=9.1.1-1ubuntu0.1 \
+    ghostscript=9.50~dfsg-5ubuntu4.4 \
     && apt-get clean
+
+RUN apt list -a qpdf
+RUN apt list -a ghostscript
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
     libgraphviz-dev \
     pkg-config \
     && apt-get clean
-
-RUN apt list -a qpdf
-RUN apt list -a ghostscript
 
 # need for nbconvert
 RUN apt-get update && apt-get install -y \
