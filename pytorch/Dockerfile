@@ -76,6 +76,11 @@ RUN pip install Cython
 RUN pip install --upgrade jupyterlab jupyterlab-git
 
 # JupyterLab extentions
+# https://github.com/jacobtomlinson/jupyterlab-nvdashboard
+RUN pip install jupyter_bokeh
+RUN pip install jupyterlab-bokeh-server
+RUN pip install jupyterlab-nvdashboard
+
 # https://ipywidgets.readthedocs.io/en/latest/user_install.html
 RUN pip install ipywidgets jupyterlab_widgets
 
