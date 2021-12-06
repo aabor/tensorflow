@@ -76,6 +76,8 @@ RUN pip install Cython
 RUN pip install --upgrade jupyterlab jupyterlab-git
 
 # JupyterLab extentions
+RUN pip install jupyterlab-theme-solarized-dark
+
 # https://github.com/jacobtomlinson/jupyterlab-nvdashboard
 RUN pip install jupyter_bokeh
 RUN pip install jupyterlab-bokeh-server
@@ -104,8 +106,8 @@ RUN pip install jupyterlab_latex
 # enable theme scrollbars Settings -> Jupyterlab Theme -> Theme Scrollbars
 
 RUN jupyter labextension install \
-  jupyterlab-topbar-extension \
-  jupyterlab-theme-solarized-dark
+  jupyterlab-topbar-extension
+  
 
 RUN jupyter labextension list
 
@@ -157,64 +159,63 @@ ENV PUNCTUATOR_DATA_DIR=~/.cache/punctuator
 # current branch is main, select revision branch
 # RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@r1.4.0#egg=nemo_toolkit[all]
 
-RUN 	python -m pip install consulate==0.6.0 \
-                 h2==3.0.1 \
-                 grpcio==1.38.1 \
-                 grpcio-tools==1.38.1 \
-                 chardet==3.0.4 \
-                 googleapis-common-protos==1.5.3 \
-                 consulate==0.6.0 \
-                 filelock==3.0.10 \
-                 mysql-connector-python==8.0.24 \
-                 paho-mqtt==1.4.0 \
-                 aiofile==1.4.3 \
-                 pycrypto==2.6.1 \
-                 setuptools==20.7.0 \
-                 certifi==2018.11.29 \
-                 words2num==0.2.3 \
-                 requests==2.21.0 \
-                 pyyaml==3.13 \
-                 aiohttp==3.4.4 \
-                 six==1.12.0 \
-                 urllib3==1.24.1 \
-                 pipdeptree==2.0.0 \
-                 aiodns==1.1.1 \
-                 setproctitle==1.1.10 \
-                 psutil==5.6.3 \
-                 numpy~=1.19.5 \
-                 pandas~=1.1.5 \
-                 PyPDF4~=1.27.0 \
-                 ImageColor~=1.2.1 \
-                 APScheduler~=3.7.0 \
-                 asgiref~=3.4.1 \
-                 toolz~=0.11.1 \
-                 Pillow~=8.3.1 \
-                 nltk~=3.6.2 \
-                 openpyxl~=3.0.7 \
-                 dataclasses~=0.6 \
-                 pyzipper~=0.3.5 \
-                 matplotlib~=3.3.4 \
-                 pdfkit~=0.6.1 \
-                 wordcloud~=1.8.1 \
-                 Jinja2~=3.0.1 \
-                 urllib3~=1.24.1 \
-                 requests~=2.21.0 \
-                 colour~=0.1.5 \
-                 beautifulsoup4~=4.9.3 \
-                 python-dateutil~=2.8.2 \
-                 graphviz~=0.17 \
-                 pygraphviz~=1.6 \
-                 phonenumbers~=8.12.36 \
-                 onnxruntime~=1.9.0 \
-                 tf2onnx~=1.9.3 \
-                 skl2onnx~=1.10.3 \
-                 nbconvert
+RUN 	python -m pip install consulate \
+                            h2 \
+                            grpcio \
+                            grpcio-tools \
+                            chardet \
+                            consulate \
+                            filelock \
+                            mysql-connector-python \
+                            paho-mqtt \
+                            aiofile \
+                            pycrypto \
+                            setuptools \
+                            certifi \
+                            words2num \
+                            requests \
+                            pyyaml \
+                            aiohttp \
+                            six \
+                            urllib3 \
+                            pipdeptree \
+                            aiodns \
+                            setproctitle \
+                            psutil \
+                            numpy \
+                            pandas \
+                            PyPDF4 \
+                            ImageColor \
+                            APScheduler \
+                            asgiref \
+                            toolz \
+                            Pillow \
+                            nltk \
+                            openpyxl \
+                            dataclasses \
+                            pyzipper \
+                            matplotlib \
+                            pdfkit \
+                            wordcloud \
+                            Jinja2 \
+                            urllib3 \
+                            requests \
+                            colour \
+                            beautifulsoup4 \
+                            python-dateutil \
+                            graphviz \
+                            pygraphviz \
+                            phonenumbers \
+                            onnxruntime \
+                            tf2onnx \
+                            skl2onnx \
+                            nbconvert
 
 RUN python3 -m pip install onnx_graphsurgeon --index-url https://pypi.ngc.nvidia.com
 
 # only for CUDA environments
-# RUN python3 -m pip install --upgrade setuptools pip
-# RUN python3 -m pip install nvidia-pyindex
-# RUN python3 -m pip install --upgrade nvidia-tensorrt
+RUN python3 -m pip install --upgrade setuptools pip
+RUN python3 -m pip install nvidia-pyindex
+RUN python3 -m pip install --upgrade nvidia-tensorrt
 
 RUN pip freeze
