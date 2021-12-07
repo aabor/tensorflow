@@ -57,7 +57,7 @@ docker run --rm \
     -v "/home/$USER/projects/Reporter/data/mnt/logs/controller_logs:/opt/controller_logs" \
     -v "/home/$USER/projects/Reporter/data/mnt/AdminTool/Private:/opt/Private" \
     -v "/home/$USER/projects/DeviceLanguage:/root/reporter/DeviceLanguage" \
-    aabor/pytorch-gpu:110cu113
+    aabor/pytorch-gpu:110cu113-1.0.0
     # aabor/pytorch-gpu:110cu102
 
 docker network connect db-connection pytorch
