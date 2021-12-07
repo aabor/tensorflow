@@ -22,7 +22,7 @@ ENV TZ=UTC
 # ARG NB_UID="1000"
 # ARG NB_GID="100"
 
-USER root 
+USER root
 
 # installation utilities
 RUN  apt-get update && apt-get install -y \
@@ -71,12 +71,14 @@ USER ${NB_UID}
 
 RUN pip install -U setuptools pip
 
-RUN pip install Cython 
-
 RUN pip install --upgrade jupyterlab jupyterlab-git
 
 # JupyterLab extentions
 RUN pip install jupyterlab-theme-solarized-dark
+# https://jupyterlab-code-formatter.readthedocs.io/en/latest/installation.html#prerequisites
+# “Settings” > “Advanced Settings Editor” > “Jupyterlab Code Formatter”
+RUN pip install jupyterlab_code_formatter
+RUN pip install black isort autopep8
 
 # https://github.com/jacobtomlinson/jupyterlab-nvdashboard
 RUN pip install jupyter_bokeh
@@ -107,45 +109,29 @@ RUN pip install jupyterlab_latex
 
 RUN jupyter labextension install \
   jupyterlab-topbar-extension
-  
+
+# https://jupyterlab.readthedocs.io/en/stable/user/debugger.html
+RUN mamba install xeus-python notebook -c conda-forge
 
 RUN jupyter labextension list
 
-# # install Jupyter notebooks extentions
-# # https://github.com/ipython-contrib/jupyter_contrib_nbextensions
-# RUN pip install jupyter_contrib_nbextensions 
-# #RUN jupyter contrib nbextension install --user
-# RUN pip install jupyter_nbextensions_configurator
-# #RUN jupyter nbextensions_configurator enable --user
-# # in notebook with mounted external folder .jupyter:/root/.jupyter
-# #!jupyter nbextension en 5xable ...
-# # in jupyter_nbextensions_configurator enable scrolldown autoscroll
-# RUN pip install notebook>=5.3 ipywidgets>=7.2
-# RUN pip install ipywidgets
-# RUN jupyter nbextension enable --py widgetsnbextension
-# RUN pip install jupyterthemes yapf
-
-RUN pip install numba
-
-RUN pip install theano
-
-RUN pip install omegaconf
-
 # check official site to get correct installation command for pytorch
 # https://pytorch.org/get-started/locally/
+# Stable (1.10) CUDA 10.2
+# RUN pip3 install torch torchvision torchaudio
+# Stable (1.10) CUDA 11.3
 RUN pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
-# Hugging Face Transformers
-RUN pip install "transformers[sentencepiece]"
+
+# # Hugging Face Transformers
+# RUN pip install transformers[sentencepiece]==3.4.0
+
+RUN pip install Cython
+ADD requirements.txt /opt/
+RUN 	python -m pip install -r /opt/requirements.txt --no-cache-dir
 
 # Nemo
-RUN pip install wget unidecode
-
 RUN pip install nemo_toolkit[all]
 
-# data sources
-RUN pip install datasets kaggle
-
-RUN pip install punctuator
 ENV PUNCTUATOR_DATA_DIR=~/.cache/punctuator
 # save downloaded models:
 # pytorch  NeMo models: /home/jovyan/.cache/torch/NeMo
@@ -158,58 +144,6 @@ ENV PUNCTUATOR_DATA_DIR=~/.cache/punctuator
 # Install nemo with pip from source. Select branch directly in https://github.com/NVIDIA page,
 # current branch is main, select revision branch
 # RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@r1.4.0#egg=nemo_toolkit[all]
-
-RUN 	python -m pip install consulate \
-                            h2 \
-                            grpcio \
-                            grpcio-tools \
-                            chardet \
-                            consulate \
-                            filelock \
-                            mysql-connector-python \
-                            paho-mqtt \
-                            aiofile \
-                            pycrypto \
-                            setuptools \
-                            certifi \
-                            words2num \
-                            requests \
-                            pyyaml \
-                            aiohttp \
-                            six \
-                            urllib3 \
-                            pipdeptree \
-                            aiodns \
-                            setproctitle \
-                            psutil \
-                            numpy \
-                            pandas \
-                            PyPDF4 \
-                            ImageColor \
-                            APScheduler \
-                            asgiref \
-                            toolz \
-                            Pillow \
-                            nltk \
-                            openpyxl \
-                            dataclasses \
-                            pyzipper \
-                            matplotlib \
-                            pdfkit \
-                            wordcloud \
-                            Jinja2 \
-                            urllib3 \
-                            requests \
-                            colour \
-                            beautifulsoup4 \
-                            python-dateutil \
-                            graphviz \
-                            pygraphviz \
-                            phonenumbers \
-                            onnxruntime \
-                            tf2onnx \
-                            skl2onnx \
-                            nbconvert
 
 RUN python3 -m pip install onnx_graphsurgeon --index-url https://pypi.ngc.nvidia.com
 
