@@ -26,17 +26,15 @@ docker run --rm \
     --ulimit memlock=-1 \
     --gpus all \
     -d --name pytorch \
-    -p 8888:8888 -p 6006:6006 -p 8050:8050\
-    --network=xvfb \
-    -e "DISPLAY=xvfb:99" \
+    -p 8890:8888 \
+    -p 6006:6006 \
+    -p 6007:6007 \
     -e "TZ=EEST" \
-    -e "WERKZEUG_DEBUG_PIN='off'" \
     -e "JUPYTER_ENABLE_LAB=yes" \
-    -v "/etc/X11/xorg.conf:/etc/X11/xorg.conf" \
-    -v "/etc/lightdm/lightdm.conf:/etc/lightdm/lightdm.conf" \
     -v "/home/$USER/projects:/home/jovyan/work" \
-    -v "/home/$USER/.jupyter:/home/jovyan/.jupyter" \
     -v "/home/$USER/.ipython:/home/jovyan/.ipython" \
+    -v "/home/$USER/.jupyter:/home/jovyan/.jupyter" \
+    -v "/home/$USER/.netrc:/home/jovyan/.netrc" \
     -v "/home/$USER/.local/share:/home/jovyan/.local/share" \
     -v "/home/$USER/.cache/torch:/home/jovyan/.cache/torch" \
     -v "/home/$USER/.cache/huggingface:/home/jovyan/.cache/huggingface" \
@@ -44,12 +42,9 @@ docker run --rm \
     -v "/home/$USER/.cache/tensorflow_datasets":"/home/jovyan/.cache/tensorflow_datasets" \
     -v "/home/$USER/Documents":"/home/jovyan/Documents" \
     -v "/home/$USER/Downloads":"/home/jovyan/Downloads" \
-    -v "/home/$USER/.logs":"/home/jovyan/.logs" \
-    -v "/home/$USER/.gitconfig:/home/jovyan/.gitconfig" \
-    -v "/home/$USER/.secrets:/home/jovyan/.secrets" \
-    -v "/home/$USER/.netrc:/home/jovyan/.netrc" \
-    aabor/pytorch-gpu:110cu113-1.0.0
-    # aabor/pytorch-gpu:110cu102
+    -v "/home/$USER/log":"/home/jovyan/log" \
+    -v "/mnt/wd5000":"/home/jovyan/wd5000" \
+    aabor/pytorch:110cu113-1.3.0
 
 docker network connect db-connection pytorch
 docker ps --filter "name=pytorch" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
