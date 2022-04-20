@@ -1,7 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
-FROM jupyter/base-notebook:python-3.8.6
-# FROM jupyter/base-notebook:python-3.9.7
+FROM jupyter/base-notebook:python-3.9.7
 # docker pull pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
 # FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
 
@@ -39,15 +38,16 @@ RUN apt-get update && apt-get install -y \
   && apt-get clean
 RUN apt-get update && apt-get install -y \
   libsndfile1 ffmpeg \
+  libavcodec-extra \
   && apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qpdf=9.1.1-1ubuntu0.1 \
-    ghostscript=9.50~dfsg-5ubuntu4.4 \
+    ghostscript \
     && apt-get clean
 
-# RUN apt list -a qpdf
-# RUN apt list -a ghostscript
+RUN apt list -a qpdf
+RUN apt list -a ghostscript
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     graphviz \
@@ -76,10 +76,6 @@ RUN pip install --upgrade jupyterlab jupyterlab-git
 
 # JupyterLab extentions
 RUN pip install jupyterlab-theme-solarized-dark
-# https://pypi.org/project/jupyterlab-theme-solarized-dark/
-# apply theme by checking Settings -> Jupyterlab Theme -> Jupyterlab Solarized Dark
-# enable theme scrollbars Settings -> Jupyterlab Theme -> Theme Scrollbars
-
 # https://jupyterlab-code-formatter.readthedocs.io/en/latest/installation.html#prerequisites
 # “Settings” > “Advanced Settings Editor” > “Jupyterlab Code Formatter”
 RUN pip install jupyterlab_code_formatter
@@ -105,8 +101,18 @@ RUN pip install 'python-lsp-server[all]'
 
 # https://github.com/jupyterlab/jupyterlab-git
 
+# https://github.com/jupyterlab/jupyterlab-latex
+RUN pip install jupyterlab_latex
+
+# https://pypi.org/project/jupyterlab-theme-solarized-dark/
+# apply theme by checking Settings -> Jupyterlab Theme -> Jupyterlab Solarized Dark
+# enable theme scrollbars Settings -> Jupyterlab Theme -> Theme Scrollbars
+
+RUN jupyter labextension install \
+  jupyterlab-topbar-extension
+
 # https://jupyterlab.readthedocs.io/en/stable/user/debugger.html
-RUN pip install xeus-python notebook
+RUN mamba install xeus-python notebook -c conda-forge
 
 RUN jupyter labextension list
 
@@ -115,10 +121,11 @@ RUN jupyter labextension list
 # Stable (1.10) CUDA 10.2
 # RUN pip3 install torch torchvision torchaudio
 # Stable (1.10) CUDA 11.3
-RUN pip3 install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio==0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+RUN pip3 install setuptools==59.5.0
+RUN pip3 install torch==1.10.2+cu113 torchvision==0.11.3+cu113 torchaudio==0.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
 
 # # Hugging Face Transformers
-RUN pip install transformers[sentencepiece]==3.4.0
+# RUN pip install transformers[sentencepiece]==3.4.0
 
 RUN pip install Cython
 ADD requirements.txt /opt/
@@ -146,6 +153,7 @@ RUN python3 -m pip install --upgrade setuptools pip
 RUN python3 -m pip install nvidia-pyindex
 RUN python3 -m pip install --upgrade nvidia-tensorrt
 
+RUN python3 -m pip install --user pyo
+
+RUN pipdeptree -fl
 RUN pip freeze
-RUN pip install pipdeptree
-RUN pipdeptree
