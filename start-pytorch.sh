@@ -8,8 +8,8 @@ mkdir -p "/home/$USER/.cache/huggingface"
 mkdir -p "/home/$USER/.cache/kaggle"
 mkdir -p "/home/$USER/.cache/tensorflow_datasets"
 mkdir -p "/home/$USER/.local/share/jupyter"
-mkdir -p "/home/$USER/.logs"
 mkdir -p "/home/$USER/.secrets"
+mkdir -p "/home/$USER/log"
 echo "directories created"
 #-u $(id -u):$(id -g) \
 # https://hub.docker.com/r/metal3d/xvfb
