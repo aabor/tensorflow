@@ -26,7 +26,7 @@ docker run --rm \
     --ulimit memlock=-1 \
     --gpus all \
     -d --name pytorch \
-    -p 8890:8888 \
+    -p 8888:8888 \
     -p 6006:6006 \
     -p 6007:6007 \
     -e "TZ=EEST" \
