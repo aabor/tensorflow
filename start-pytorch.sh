@@ -44,7 +44,7 @@ docker run --rm \
     -v "/home/$USER/Downloads":"/home/jovyan/Downloads" \
     -v "/home/$USER/log":"/home/jovyan/log" \
     -v "/mnt/wd5000":"/home/jovyan/wd5000" \
-    aabor/pytorch:110cu113-1.3.0
+    aabor/pytorch:110cu113-1.5.0
 
 docker network connect db-connection pytorch
 docker ps --filter "name=pytorch" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"

@@ -1,5 +1,6 @@
 # aabor/tensorflow
 # configured for automatic build
+# https://github.com/jupyter/docker-stacks
 FROM jupyter/base-notebook:python-3.9.7
 # docker pull pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
 # FROM pytorch/pytorch:1.9.1-cuda11.1-cudnn8-runtime
@@ -118,18 +119,26 @@ RUN jupyter labextension list
 
 # check official site to get correct installation command for pytorch
 # https://pytorch.org/get-started/locally/
-# Stable (1.10) CUDA 10.2
-# RUN pip3 install torch torchvision torchaudio
-# Stable (1.10) CUDA 11.3
-RUN pip3 install setuptools==59.5.0
-RUN pip3 install torch==1.10.2+cu113 torchvision==0.11.3+cu113 torchaudio==0.10.2+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+RUN pip3 install --upgrade setuptools
+RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
 
-# # Hugging Face Transformers
-# RUN pip install transformers[sentencepiece]==3.4.0
+ENV TORCH_CUDA_ARCH_LIST="compute capability"
+RUN git clone https://github.com/NVIDIA/apex && \
+ python ./apex/setup.py install && \
+ rm -r ./apex
+
+WORKDIR /home/jovyan/work
+
+RUN pip3 install torch-tensorrt -f https://github.com/NVIDIA/Torch-TensorRT/releases
+
+
+# Hugging Face Transformers
+RUN pip install git+https://github.com/huggingface/transformers
 
 RUN pip install Cython
 ADD requirements.txt /opt/
-RUN 	python -m pip install -r /opt/requirements.txt --no-cache-dir
+RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
+RUN python -m pip install mlprodict==0.8.1762
 
 # Nemo
 RUN pip install nemo_toolkit[all]

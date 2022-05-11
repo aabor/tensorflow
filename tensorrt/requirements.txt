@@ -18,7 +18,7 @@ omegaconf==2.1.1
 netron==5.6.7
 num2words==0.5.10
 onnx==1.11.0
-onnxruntime==1.11.0
+onnxruntime-gpu==1.11.0
 openpyxl==3.0.9
 path==16.3.0
 pdfkit==1.0.0
@@ -42,3 +42,4 @@ scipy==1.8.0
 librosa==0.9.1
 pydub==0.25.1
 mingus==0.6.1
+torchsummary==1.5.1
