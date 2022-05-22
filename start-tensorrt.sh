@@ -93,10 +93,10 @@ docker ps --filter "name=tensorrt" --format "{{.ID}}: {{.Status}}: {{.Names}}: {
 #   "Nsight Systems: 2021.1.3.14",
 #   "NVIDIA Linux Driver: 465.19.01"
 # ]
-dpkg -L libnvinfer8
-# /usr/lib/x86_64-linux-gnu/libnvinfer.so.8.4.0
-dpkg -L libnvonnxparser8
-# /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.8.4.0
-dpkg -L libnvparsers8
-# /usr/lib/x86_64-linux-gnu/libnvparsers.so.8.4.0
+# dpkg -L libnvinfer8
+# # /usr/lib/x86_64-linux-gnu/libnvinfer.so.8.4.0
+# dpkg -L libnvonnxparser8
+# # /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.8.4.0
+# dpkg -L libnvparsers8
+# # /usr/lib/x86_64-linux-gnu/libnvparsers.so.8.4.0
 
