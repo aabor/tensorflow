@@ -60,9 +60,9 @@ RUN npm install -g @bazel/bazelisk
 WORKDIR /tmp
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
 RUN mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-RUN wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
-RUN dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
-RUN apt-key add /var/cuda-repo-ubuntu2004-11-3-local/7fa2af80.pub
+RUN wget https://developer.download.nvidia.com/compute/cuda/11.6.2/local_installers/cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
+RUN dpkg -i cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
+RUN apt-key add /var/cuda-repo-ubuntu2004-11-6-local/7fa2af80.pub
 RUN apt-get update && apt-get -y install cuda
 
 
@@ -78,28 +78,24 @@ RUN mv cuda-${OS}.pin /etc/apt/preferences.d/cuda-repository-pin-600
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/${OS}/x86_64/7fa2af80.pub
 RUN add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/${OS}/x86_64/ /"
 RUN apt-get update
-ARG cuda_version=cuda11.4
+ARG cuda_version=cuda11.6
 # https://pkgs.org/download/libcudnn8
-ARG cudnn_version=8.2.4.15
+ARG cudnn_version=8.4.0.27
 RUN apt-get install libcudnn8=${cudnn_version}-1+${cuda_version}
 RUN apt-get install libcudnn8-dev=${cudnn_version}-1+${cuda_version}
 
 # TensorRT
-# https://github.com/NVIDIA/Torch-TensorRT/releases
 # https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#maclearn-net-repo-install
-# https://pkgs.org/download/libnvinfer8
-ARG tensorrt_version="8.2.4-1+cuda11.4"
-RUN apt-get update && apt-get install \
-  libnvinfer8=${tensorrt_version} \
-  libnvonnxparsers8=${tensorrt_version} \
-  libnvparsers8=${tensorrt_version} \
-  libnvinfer-plugin8=${tensorrt_version} \
-  libnvinfer-dev=${tensorrt_version} \
-  libnvonnxparsers-dev=${tensorrt_version} \
-  libnvparsers-dev=${tensorrt_version} \
-  libnvinfer-plugin-dev=${tensorrt_version} \
-  python3-libnvinfer=${tensorrt_version}
-RUN apt-mark hold libnvinfer8 libnvonnxparsers8 libnvparsers8 libnvinfer-plugin8 libnvinfer-dev libnvonnxparsers-dev libnvparsers-dev libnvinfer-plugin-dev python3-libnvinfer
+# Download manually TensorRT repo for debian installer
+# https://developer.nvidia.com/nvidia-tensorrt-8x-download
+# Example: TensorRT 8.4 EA for x86_64 Architecture Debian, RPM, and TAR Install Packages for Linux
+ARG os="ubuntu2004"
+ARG tag="cuda11.6-trt8.4.0.6-ea-20220212"
+ADD nv-tensorrt-repo-${os}-${tag}_1-1_amd64.deb /tmp
+RUN dpkg -i nv-tensorrt-repo-${os}-${tag}_1-1_amd64.deb
+RUN apt-key add /var/nv-tensorrt-repo-${os}-${tag}/*.pub
+RUN apt-get update && apt-get install tensorrt -y
+RUN dpkg -l | grep TensorRT
 
 # RUN apt-get update && apt-get install -y python3-pycuda
 
@@ -182,10 +178,10 @@ RUN pip3 install torch-tensorrt -f https://github.com/NVIDIA/Torch-TensorRT/rele
 RUN pip install nvidia-pyindex
 RUN pip install onnx-graphsurgeon
 
-# APEX
+# # APEX
 RUN git clone https://github.com/NVIDIA/apex
 WORKDIR /tmp/apex
-RUN pip3 install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+RUN pip install -v --disable-pip-version-check --no-cache-dir ./
 
 # Hugging Face Transformers
 RUN pip install git+https://github.com/huggingface/transformers

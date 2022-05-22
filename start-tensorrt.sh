@@ -47,7 +47,7 @@ docker run --rm \
     -v "/home/$USER/Downloads:/home/jovyan/Downloads" \
     -v "/home/$USER/log:/home/jovyan/log" \
     -v "/mnt/wd5000:/home/jovyan/wd5000" \
-    aabor/tensorrt:1.1.0 \
+    aabor/tensorrt:1.2.0 \
     jupyter lab --no-browser --ip 0.0.0.0
     # tensorrt-ubuntu20.04-cuda11.4:latest \
     # jupyter-lab --port=8888 --no-browser --ip 0.0.0.0 --allow-root
@@ -56,3 +56,47 @@ docker run --rm \
 docker network connect db-connection tensorrt
 docker ps --filter "name=tensorrt" --format "{{.ID}}: {{.Status}}: {{.Names}}: {{.Ports}}"
 #docker stop $(docker ps -a -q);  docker rm $(docker ps -a -q)
+
+# # inside docker container
+# sudo docker exec -it tensorrt /bin/bash
+# # check versions
+# jq -C '[.[] | .name +": "+ .version] '  /usr/local/cuda-11.3/version.json
+# [
+#   "CUDA SDK: 11.3.0",
+#   "CUDA Runtime (cudart): 11.3.58",
+#   "cuobjdump: 11.3.58",
+#   "CUPTI: 11.3.58",
+#   "CUDA cu++ filt: 11.3.58",
+#   "CUDA Demo Suite: 11.3.58",
+#   "CUDA GDB: 11.3.58",
+#   "CUDA Memcheck: 11.3.58",
+#   "Nsight Eclipse Plugins: 11.3.58",
+#   "CUDA NVCC: 11.3.58",
+#   "CUDA nvdisasm: 11.3.58",
+#   "CUDA NVML Headers: 11.3.58",
+#   "CUDA nvprof: 11.3.58",
+#   "CUDA nvprune: 11.3.58",
+#   "CUDA NVRTC: 11.3.58",
+#   "CUDA NVTX: 11.3.58",
+#   "CUDA NVVP: 11.3.58",
+#   "CUDA Samples: 11.3.58",
+#   "CUDA Compute Sanitizer API: 11.3.58",
+#   "Fabric Manager: 465.19.01",
+#   "CUDA cuBLAS: 11.4.2.10064",
+#   "CUDA cuFFT: 10.4.2.58",
+#   "CUDA cuRAND: 10.2.4.58",
+#   "CUDA cuSOLVER: 11.1.1.58",
+#   "CUDA cuSPARSE: 11.5.0.58",
+#   "CUDA NPP: 11.3.3.44",
+#   "CUDA nvJPEG: 11.4.1.58",
+#   "Nsight Compute: 2021.1.0.18",
+#   "Nsight Systems: 2021.1.3.14",
+#   "NVIDIA Linux Driver: 465.19.01"
+# ]
+dpkg -L libnvinfer8
+# /usr/lib/x86_64-linux-gnu/libnvinfer.so.8.4.0
+dpkg -L libnvonnxparser8
+# /usr/lib/x86_64-linux-gnu/libnvonnxparser.so.8.4.0
+dpkg -L libnvparsers8
+# /usr/lib/x86_64-linux-gnu/libnvparsers.so.8.4.0
+
