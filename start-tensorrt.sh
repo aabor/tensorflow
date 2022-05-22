@@ -34,21 +34,21 @@ docker run --rm \
     -e "TZ=EEST" \
     -e "JUPYTER_ENABLE_LAB=yes" \
     -v "/home/$USER/projects/TensorRT:/workspace/TensorRT" \
-    -v "/home/$USER/projects:/workspace/projects" \
-    -v "/home/$USER/.ipython:/workspace/.ipython" \
-    -v "/home/$USER/.jupyter:/workspace/.jupyter" \
-    -v "/home/$USER/.netrc:/workspace/.netrc" \
-    -v "/home/$USER/.local/share:/workspace/.local/share" \
-    -v "/home/$USER/.cache/torch:/workspace/.cache/torch" \
-    -v "/home/$USER/.cache/huggingface:/workspace/.cache/huggingface" \
-    -v "/home/$USER/.cache/kaggle:/workspace/.cache/kaggle" \
-    -v "/home/$USER/.cache/tensorflow_datasets:/workspace/.cache/tensorflow_datasets" \
-    -v "/home/$USER/Documents:/workspace/Documents" \
-    -v "/home/$USER/Downloads:/workspace/Downloads" \
-    -v "/home/$USER/log:/workspace/log" \
-    -v "/mnt/wd5000:/workspace/wd5000" \
-    aabor/tensorrt:cuda116 \
-    jupyter lab --no-browser --ip 0.0.0.0 --allow-root
+    -v "/home/$USER/projects:/home/jovyan/work" \
+    -v "/home/$USER/.ipython:/home/jovyan/.ipython" \
+    -v "/home/$USER/.jupyter:/home/jovyan/.jupyter" \
+    -v "/home/$USER/.netrc:/home/jovyan/.netrc" \
+    -v "/home/$USER/.local/share:/home/jovyan/.local/share" \
+    -v "/home/$USER/.cache/torch:/home/jovyan/.cache/torch" \
+    -v "/home/$USER/.cache/huggingface:/home/jovyan/.cache/huggingface" \
+    -v "/home/$USER/.cache/kaggle:/home/jovyan/.cache/kaggle" \
+    -v "/home/$USER/.cache/tensorflow_datasets:/home/jovyan/.cache/tensorflow_datasets" \
+    -v "/home/$USER/Documents:/home/jovyan/Documents" \
+    -v "/home/$USER/Downloads:/home/jovyan/Downloads" \
+    -v "/home/$USER/log:/home/jovyan/log" \
+    -v "/mnt/wd5000:/home/jovyan/wd5000" \
+    aabor/tensorrt:1.1.0 \
+    jupyter lab --no-browser --ip 0.0.0.0
     # tensorrt-ubuntu20.04-cuda11.4:latest \
     # jupyter-lab --port=8888 --no-browser --ip 0.0.0.0 --allow-root
 

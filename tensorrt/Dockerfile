@@ -101,6 +101,8 @@ RUN apt-get update && apt-get install \
   python3-libnvinfer=${tensorrt_version}
 RUN apt-mark hold libnvinfer8 libnvonnxparsers8 libnvparsers8 libnvinfer-plugin8 libnvinfer-dev libnvonnxparsers-dev libnvparsers-dev libnvinfer-plugin-dev python3-libnvinfer
 
+# RUN apt-get update && apt-get install -y python3-pycuda
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     qpdf \
     ghostscript \
@@ -195,13 +197,9 @@ RUN apt-get update && apt-get install -y libsndfile1 ffmpeg
 USER ${NB_UID}
 RUN pip install Cython
 RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@main#egg=nemo_toolkit[all]
-
-# ADD requirements.txt /opt/
-# RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
-# RUN python -m pip install mlprodict==0.8.1762
-
-# # Nemo
-# RUN pip install nemo_toolkit[all]
+RUN pip install cupy --no-cache-dir -vvvv
+ADD requirements.txt /opt/
+RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 
 # # save downloaded models:
 # # pytorch  NeMo models: /home/jovyan/.cache/torch/NeMo
@@ -210,10 +208,6 @@ RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@main#egg=nemo_t
 # # save datasets:
 # # kaggle: /home/jovyan/.cache/kaggle
 # # tensorflow: /home/jovyan/.cache/tensorflow_datasets
-
-# # Install nemo with pip from source. Select branch directly in https://github.com/NVIDIA page,
-# # current branch is main, select revision branch
-# # RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@r1.4.0#egg=nemo_toolkit[all]
 
 RUN pip freeze
 
