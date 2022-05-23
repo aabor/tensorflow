@@ -38,9 +38,10 @@ RUN apt update && apt install -y \
     && sudo apt clean
 
 RUN apt update && apt install -y \
-    build-essential bison flex \
+    build-essential binutils gdb bison flex \
     software-properties-common \
     cmake \
+    python-dev python-setuptools libboost-python-dev libboost-thread-dev \
     && sudo apt-get clean
 
 # Install Node.js and npm for JupyterLab extensions
@@ -65,6 +66,15 @@ RUN dpkg -i cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
 RUN apt-key add /var/cuda-repo-ubuntu2004-11-6-local/7fa2af80.pub
 RUN apt-get update && apt-get -y install cuda
 
+# PyCUDA installation
+# https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#installing-pycuda
+# https://medium.com/leadkaro/setting-up-pycuda-on-ubuntu-18-04-for-gpu-programming-with-python-830e03fc4b81
+ENV PATH=$PATH:/usr/local/cuda-11.6/bin
+# ENV LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64
+# RUN python3 -m pip install pybind11==2.9.2
+USER ${NB_UID}
+RUN python3 -m pip install 'pycuda<2021.1'
+USER root
 
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb
@@ -96,7 +106,7 @@ RUN dpkg -i nv-tensorrt-repo-${os}-${tag}_1-1_amd64.deb
 RUN apt-key add /var/nv-tensorrt-repo-${os}-${tag}/*.pub
 RUN apt-get update && apt-get install tensorrt -y
 RUN dpkg -l | grep TensorRT
-
+RUN apt-get update && apt-get install python3-libnvinfer-dev uff-converter-tf onnx-graphsurgeon -y
 # RUN apt-get update && apt-get install -y python3-pycuda
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

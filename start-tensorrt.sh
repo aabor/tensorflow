@@ -1,4 +1,5 @@
-# docker build -t aabor/tensorrt:cuda116 .
+# docker build -t aabor/tensorrt:1.2.0 .
+# docker build --no-cache --progress plain -t aabor/tensorrt:1.2.1 .
 docker network create xvfb || true
 docker network create db-connection || true
 echo "networks created" 
