@@ -65,16 +65,7 @@ RUN wget https://developer.download.nvidia.com/compute/cuda/11.6.2/local_install
 RUN dpkg -i cuda-repo-ubuntu2004-11-6-local_11.6.2-510.47.03-1_amd64.deb
 RUN apt-key add /var/cuda-repo-ubuntu2004-11-6-local/7fa2af80.pub
 RUN apt-get update && apt-get -y install cuda
-
-# PyCUDA installation
-# https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#installing-pycuda
-# https://medium.com/leadkaro/setting-up-pycuda-on-ubuntu-18-04-for-gpu-programming-with-python-830e03fc4b81
 ENV PATH=$PATH:/usr/local/cuda-11.6/bin
-# ENV LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64
-# RUN python3 -m pip install pybind11==2.9.2
-USER ${NB_UID}
-RUN python3 -m pip install 'pycuda<2021.1'
-USER root
 
 # https://developer.nvidia.com/blog/updating-the-cuda-linux-gpg-repository-key/
 RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.0-1_all.deb
@@ -94,6 +85,12 @@ ARG cudnn_version=8.4.0.27
 RUN apt-get install libcudnn8=${cudnn_version}-1+${cuda_version}
 RUN apt-get install libcudnn8-dev=${cudnn_version}-1+${cuda_version}
 
+
+USER ${NB_UID}
+# CuPy
+RUN pip install cupy --no-cache-dir -vvvv
+USER root
+
 # TensorRT
 # https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#maclearn-net-repo-install
 # Download manually TensorRT repo for debian installer
@@ -106,7 +103,7 @@ RUN dpkg -i nv-tensorrt-repo-${os}-${tag}_1-1_amd64.deb
 RUN apt-key add /var/nv-tensorrt-repo-${os}-${tag}/*.pub
 RUN apt-get update && apt-get install tensorrt -y
 RUN dpkg -l | grep TensorRT
-RUN apt-get update && apt-get install python3-libnvinfer-dev uff-converter-tf onnx-graphsurgeon -y
+# RUN apt-get update && apt-get install python3-libnvinfer-dev uff-converter-tf onnx-graphsurgeon -y
 # RUN apt-get update && apt-get install -y python3-pycuda
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -185,9 +182,6 @@ RUN pip3 install torch torchvision torchaudio --extra-index-url https://download
 # https://nvidia.github.io/Torch-TensorRT/v1.0.0/tutorials/installation.html
 RUN pip3 install torch-tensorrt -f https://github.com/NVIDIA/Torch-TensorRT/releases
 
-RUN pip install nvidia-pyindex
-RUN pip install onnx-graphsurgeon
-
 # # APEX
 RUN git clone https://github.com/NVIDIA/apex
 WORKDIR /tmp/apex
@@ -201,9 +195,8 @@ RUN python3 -m pip install --user pyo
 USER root
 RUN apt-get update && apt-get install -y libsndfile1 ffmpeg
 USER ${NB_UID}
-RUN pip install Cython
 RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@main#egg=nemo_toolkit[all]
-RUN pip install cupy --no-cache-dir -vvvv
+
 ADD requirements.txt /opt/
 RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 
@@ -214,6 +207,17 @@ RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 # # save datasets:
 # # kaggle: /home/jovyan/.cache/kaggle
 # # tensorflow: /home/jovyan/.cache/tensorflow_datasets
+
+# PyCUDA installation
+# https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#installing-pycuda
+# https://medium.com/leadkaro/setting-up-pycuda-on-ubuntu-18-04-for-gpu-programming-with-python-830e03fc4b81
+# https://wiki.tiker.net/PyCuda/Installation/Linux/#step-1-download-and-unpack-pycuda
+# ENV LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64
+# RUN python3 -m pip install pybind11==2.9.2
+RUN python3 -m pip install 'pycuda<2021.1'
+# Nvidia TensorRT for python
+RUN python3 -m pip install nvidia-pyindex
+RUN pip install nvidia-tensorrt onnx-graphsurgeon
 
 RUN pip freeze
 
