@@ -11,6 +11,7 @@ mysql-connector-python==8.0.24
 nmslib==2.1.1
 omegaconf==2.1.1
 lightgbm==3.3.2
+line_profiler==3.5.1
 netron
 num2words==0.5.10
 numpy==1.21.6
