@@ -174,6 +174,9 @@ RUN jupyter labextension install \
 
 RUN jupyter labextension list
 
+# exposes C++ types in Python and vice versa, mainly to create Python bindings of existing C++ code
+RUN conda install -c conda-forge pybind11
+
 # Torch
 # https://pytorch.org/get-started/locally/
 RUN pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
@@ -213,12 +216,10 @@ RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 # https://medium.com/leadkaro/setting-up-pycuda-on-ubuntu-18-04-for-gpu-programming-with-python-830e03fc4b81
 # https://wiki.tiker.net/PyCuda/Installation/Linux/#step-1-download-and-unpack-pycuda
 # ENV LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64
-# RUN python3 -m pip install pybind11==2.9.2
 RUN python3 -m pip install 'pycuda<2021.1'
 # Nvidia TensorRT for python
 RUN python3 -m pip install nvidia-pyindex
 RUN pip install nvidia-tensorrt onnx-graphsurgeon
-
 RUN pip freeze
 
 WORKDIR /home/jovyan/work

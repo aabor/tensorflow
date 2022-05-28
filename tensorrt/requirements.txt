@@ -6,13 +6,17 @@ graphviz==0.19
 imagecolor==1.2.1
 jieba==0.39
 kaggle==1.5.12
+mlprodict==0.8.1762
 mysql-connector-python==8.0.24 
 nmslib==2.1.1
 omegaconf==2.1.1
+lightgbm==3.3.2
 netron
 num2words==0.5.10
+numpy==1.21.6
 onnx==1.11.0
 onnxruntime-gpu==1.11.0
+onnxmltools==1.11.0
 openpyxl==3.0.9
 path==16.3.0
 pdfkit==1.0.0
@@ -20,6 +24,7 @@ pipdeptree==2.2.0
 pycrypto==2.6.1
 pygraphviz==1.7
 PyPDF4==1.27.0 
+pyquickhelper==1.11.3697
 pysubs2==0.2.4
 pytorch_lightning==1.5.10
 pyzipper==0.3.5
@@ -28,6 +33,7 @@ simpleeval==0.9.11
 skl2onnx
 sklearn-crfsuite
 toolz==0.11.2
+xgboost==1.6.1
 xlsxwriter==3.0.2
 wandb==0.12.10
 scipy==1.8.0

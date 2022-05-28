@@ -48,7 +48,7 @@ docker run --rm \
     -v "/home/$USER/Downloads:/home/jovyan/Downloads" \
     -v "/home/$USER/log:/home/jovyan/log" \
     -v "/mnt/wd5000:/home/jovyan/wd5000" \
-    aabor/tensorrt:1.2.1 \
+    aabor/tensorrt:1.2.2 \
     jupyter lab --no-browser --ip 0.0.0.0
     # tensorrt-ubuntu20.04-cuda11.4:latest \
     # jupyter-lab --port=8888 --no-browser --ip 0.0.0.0 --allow-root
