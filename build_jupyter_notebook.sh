@@ -7,13 +7,16 @@ git clone https://github.com/jupyter/docker-stacks
 id $USER
 # uid=1005(aabor) gid=1005(aabor) groups=1005(aabor),4(adm),24(cdrom),27(sudo),...
 
-# create custom base-notebook docker image by setting docker build argument
-# to current user ID
+# create custom base-notebook docker image 
+# by setting docker build argument to current user ID
 cd ~/projects/docker-stacks/base-notebook
 DOCKER_BUILDKIT=1 docker build -t $USER/base-notebook:python-3.8.13 \
     --build-arg PYTHON_VERSION=3.8.13 \
     --build-arg NB_UID=1005 \
     .
+
+# now create custom minimal-notebook with the same UID=1005
+# set the docker build argument BASE_CONTAINER to the image tag created in previous step
 cd ~/projects/docker-stacks/minimal-notebook
 DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
     --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
