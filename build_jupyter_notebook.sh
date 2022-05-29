@@ -14,9 +14,14 @@ DOCKER_BUILDKIT=1 docker build -t $USER/base-notebook:python-3.8.13 \
     --build-arg PYTHON_VERSION=3.8.13 \
     --build-arg NB_UID=1005 \
     .
-
-DOCKER_BUILDKIT=1 docker build -t $USER/tensorrt:1.3.0 \
-    --build-arg ROOT_CONTAINER=$USER/base-notebook:python-3.8.13 \
+cd ~/projects/docker-stacks/minimal-notebook
+DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
+    --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
     .
+
 # # build more verbosely
-# docker build --no-cache --progress plain -t $USER/base-notebook:python-3.8.13 .
+# DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
+#     --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
+#     --no-cache \
+#     --progress plain \
+#     .
