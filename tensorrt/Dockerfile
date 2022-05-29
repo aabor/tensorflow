@@ -1,7 +1,10 @@
 # aabor/tensorflow
 # configured for automatic build
 # https://github.com/jupyter/docker-stacks
-FROM aabor/tensorrt-base:1.0.0
+
+ARG ROOT_CONTAINER=aabor/base-notebook:python-3.8.13
+
+FROM $ROOT_CONTAINER
 
 LABEL maintainer="A. A. Borochkin"
 
