@@ -40,6 +40,7 @@ wandb==0.12.10
 scipy==1.8.0
 librosa==0.9.1
 pydub==0.25.1
+pyod==1.0.1
 mingus==0.6.1
 torchsummary==1.5.1
 git-lfs==1.6
