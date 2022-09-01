@@ -1,8 +1,6 @@
-# aabor/tensorflow
-# configured for automatic build
 # https://github.com/jupyter/docker-stacks
 
-ARG ROOT_CONTAINER=aabor/base-notebook:python-3.8.13
+ARG ROOT_CONTAINER=jupyter/base-notebook:ubuntu-20.04
 
 FROM $ROOT_CONTAINER
 
@@ -26,19 +24,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 
-RUN apt update && apt install -y \
-    ssh \
-    cifs-utils \
-    vim \
-    xclip \
-    curl \
-    wget \
-    jq \
-    xz-utils \
-    zlib1g \
-    dpkg-sig \
-    git \
-    && sudo apt clean
+RUN apt update && apt install -y ssh cifs-utils vim xclip curl wget jq xz-utils zlib1g dpkg-sig git
 
 RUN apt update && apt install -y \
     build-essential binutils gdb bison flex \
@@ -49,7 +35,7 @@ RUN apt update && apt install -y \
 
 # Install Node.js and npm for JupyterLab extensions
 # Download and execute the NodeSource installation script
-RUN curl -sL https://deb.nodesource.com/setup_16.x  | bash -
+RUN curl -sL https://deb.nodesource.com/setup_18.x  | bash -
 # The nodejs package contains both the node and npm binaries
 RUN apt-get -y install nodejs
 
@@ -196,13 +182,14 @@ RUN pip install -v --disable-pip-version-check --no-cache-dir ./
 # Hugging Face Transformers
 RUN pip install git+https://github.com/huggingface/transformers
 
-RUN python3 -m pip install --user pyo
-
 USER root
 RUN apt-get update && apt-get install -y libsndfile1 ffmpeg
 USER ${NB_UID}
+
+RUN python -m pip install Cython
 RUN python -m pip install git+https://github.com/NVIDIA/NeMo.git@main#egg=nemo_toolkit[all]
 
+RUN python -m pip install pyquicksetup==0.2.4
 ADD requirements.txt /opt/
 RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 
@@ -222,7 +209,7 @@ RUN python -m pip install -r /opt/requirements.txt --no-cache-dir
 RUN python3 -m pip install 'pycuda<2021.1'
 # Nvidia TensorRT for python
 RUN python3 -m pip install nvidia-pyindex
-RUN pip install nvidia-tensorrt onnx-graphsurgeon
+RUN pip install nvidia-tensorrt
 RUN pip freeze
 
 WORKDIR /home/jovyan/work
