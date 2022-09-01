@@ -22,9 +22,9 @@ DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
     --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
     .
 
-# # build more verbosely
-# DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
-#     --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
-#     --no-cache \
-#     --progress plain \
-#     .
+# build more verbosely
+DOCKER_BUILDKIT=1 docker build -t $USER/minimal-notebook:python-3.8.13 \
+    --build-arg BASE_CONTAINER=$USER/base-notebook:python-3.8.13 \
+    --no-cache \
+    --progress plain \
+    .
